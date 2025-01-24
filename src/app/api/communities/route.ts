@@ -1,9 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
+
 import { Community } from "@/app/models";
+import { connectDB } from "@/lib/utils";
 
 export async function GET(req: NextRequest) {
 	try {
+		await connectDB();
 		const { manager } = await req.json();
+		if (!manager?.trim()) {
+			return NextResponse.json(
+				{ error: "manager is required" },
+				{ status: 400 }
+			);
+		}
 		const communities = await Community.find({ manager });
 		return NextResponse.json({ data: communities }, { status: 200 });
 	} catch (error) {
@@ -13,6 +22,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
 	try {
+		await connectDB();
 		const { name, description, manager } = await req.json();
 		if (!name?.trim() || !description?.trim() || !manager?.trim()) {
 			return NextResponse.json(

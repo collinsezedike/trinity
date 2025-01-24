@@ -1,11 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { ContextParamsType } from "@/lib/utils";
+import { connectDB, ContextParamsType } from "@/lib/utils";
 import { Token } from "@/app/models";
 
 export async function GET(req: NextRequest, context: ContextParamsType) {
 	try {
+		await connectDB();
 		const token = await Token.findById(context.params.id);
+		if (!token) {
+			return NextResponse.json(
+				{ error: "invalid token id" },
+				{ status: 400 }
+			);
+		}
 		return NextResponse.json({ data: token }, { status: 200 });
 	} catch (error) {
 		return NextResponse.json({ error }, { status: 500 });

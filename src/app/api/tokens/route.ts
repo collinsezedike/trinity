@@ -1,9 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
+
 import { Token } from "@/app/models";
+import { connectDB } from "@/lib/utils";
 
 export async function GET(req: NextRequest) {
 	try {
+		await connectDB();
 		const { authority, community } = await req.json();
+		if (!authority?.trim() || !community?.trim()) {
+			return NextResponse.json(
+				{ error: "authority and community are required" },
+				{ status: 400 }
+			);
+		}
 		const tokens = await Token.find({ authority, community });
 		return NextResponse.json({ data: tokens }, { status: 200 });
 	} catch (error) {
@@ -13,6 +22,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
 	try {
+		await connectDB();
 		const { name, symbol, description, image, mint, authority, community } =
 			await req.json();
 		if (
@@ -25,7 +35,9 @@ export async function POST(req: NextRequest) {
 			!community?.trim()
 		) {
 			return NextResponse.json(
-				{ error: "All fields are required" },
+				{
+					error: "name, symbol, description, image, mint, authority and community are required",
+				},
 				{ status: 400 }
 			);
 		}
