@@ -27,4 +27,5 @@ const CommunitySchema = new mongoose.Schema<CommunityType>(
 	{ timestamps: true }
 );
 
-export default mongoose.model("Community", CommunitySchema);
+export default mongoose.models.Community ||
+	mongoose.model("Community", CommunitySchema);

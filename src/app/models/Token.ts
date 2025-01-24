@@ -55,4 +55,4 @@ const TokenSchema = new mongoose.Schema<TokenType>(
 	{ timestamps: true }
 );
 
-export default mongoose.model("Token", TokenSchema);
+export default mongoose.models.Token || mongoose.model("Token", TokenSchema);
