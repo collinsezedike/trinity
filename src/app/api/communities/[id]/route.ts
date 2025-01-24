@@ -6,7 +6,8 @@ import { Community } from "@/app/models";
 export async function GET(req: NextRequest, context: ContextParamsType) {
 	try {
 		await connectDB();
-		const community = await Community.findById(context.params.id);
+		const { id } = await context.params;
+		const community = await Community.findById(id);
 		if (!community) {
 			return NextResponse.json(
 				{ error: "invalid community id" },

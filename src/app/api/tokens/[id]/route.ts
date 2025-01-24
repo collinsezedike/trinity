@@ -6,7 +6,8 @@ import { Token } from "@/app/models";
 export async function GET(req: NextRequest, context: ContextParamsType) {
 	try {
 		await connectDB();
-		const token = await Token.findById(context.params.id);
+		const { id } = await context.params;
+		const token = await Token.findById(id);
 		if (!token) {
 			return NextResponse.json(
 				{ error: "invalid token id" },

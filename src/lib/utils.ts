@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export type ContextParamsType = { params: { id: string } };
+export type ContextParamsType = { params: Promise<{ id: string }> };
 
 export async function connectDB() {
 	if (mongoose.connection.readyState !== 1) {

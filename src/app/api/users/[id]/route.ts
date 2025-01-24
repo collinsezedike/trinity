@@ -7,7 +7,8 @@ export async function GET(req: NextRequest, context: ContextParamsType) {
 	try {
 		await connectDB();
 		// In the case of a user, the id is the wallet address
-		const user = await User.findOne({ address: context.params.id });
+		const { id } = await context.params;
+		const user = await User.findOne({ address: id });
 		if (!user) {
 			return NextResponse.json(
 				{ error: "invalid wallet address" },
@@ -28,7 +29,8 @@ export async function PUT(req: NextRequest, context: ContextParamsType) {
 		await connectDB();
 		const { username } = await req.json();
 		// In the case of a user, the id is the wallet address
-		const user = await User.findOne({ address: context.params.id });
+		const { id } = await context.params;
+		const user = await User.findOne({ address: id });
 		if (!user) {
 			return NextResponse.json(
 				{ error: "invalid wallet address" },
