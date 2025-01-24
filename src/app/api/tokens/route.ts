@@ -6,7 +6,8 @@ import { connectDB } from "@/lib/utils";
 export async function GET(req: NextRequest) {
 	try {
 		await connectDB();
-		const { authority, community } = await req.json();
+		const authority = req.nextUrl.searchParams.get("authority");
+		const community = req.nextUrl.searchParams.get("community");
 		if (!authority?.trim() || !community?.trim()) {
 			return NextResponse.json(
 				{ error: "authority and community are required" },
@@ -15,8 +16,11 @@ export async function GET(req: NextRequest) {
 		}
 		const tokens = await Token.find({ authority, community });
 		return NextResponse.json({ data: tokens }, { status: 200 });
-	} catch (error) {
-		return NextResponse.json({ error }, { status: 500 });
+	} catch (error: any) {
+		return NextResponse.json(
+			{ error: error.message ? error.message : error },
+			{ status: 500 }
+		);
 	}
 }
 
@@ -52,7 +56,10 @@ export async function POST(req: NextRequest) {
 		});
 		await newToken.save();
 		return NextResponse.json({ data: newToken }, { status: 200 });
-	} catch (error) {
-		return NextResponse.json({ error }, { status: 500 });
+	} catch (error: any) {
+		return NextResponse.json(
+			{ error: error.message ? error.message : error },
+			{ status: 500 }
+		);
 	}
 }

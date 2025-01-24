@@ -14,8 +14,11 @@ export async function GET(req: NextRequest, context: ContextParamsType) {
 			);
 		}
 		return NextResponse.json({ data: token }, { status: 200 });
-	} catch (error) {
-		return NextResponse.json({ error }, { status: 500 });
+	} catch (error: any) {
+		return NextResponse.json(
+			{ error: error.message ? error.message : error },
+			{ status: 500 }
+		);
 	}
 }
 

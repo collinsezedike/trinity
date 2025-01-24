@@ -6,7 +6,7 @@ import { connectDB } from "@/lib/utils";
 export async function GET(req: NextRequest) {
 	try {
 		await connectDB();
-		const { manager } = await req.json();
+		const manager = req.nextUrl.searchParams.get("manager");
 		if (!manager?.trim()) {
 			return NextResponse.json(
 				{ error: "manager is required" },
@@ -15,8 +15,11 @@ export async function GET(req: NextRequest) {
 		}
 		const communities = await Community.find({ manager });
 		return NextResponse.json({ data: communities }, { status: 200 });
-	} catch (error) {
-		return NextResponse.json({ error }, { status: 500 });
+	} catch (error: any) {
+		return NextResponse.json(
+			{ error: error.message ? error.message : error },
+			{ status: 500 }
+		);
 	}
 }
 
@@ -33,7 +36,10 @@ export async function POST(req: NextRequest) {
 		const newCommunity = new Community({ name, description, manager });
 		await newCommunity.save();
 		return NextResponse.json({ data: newCommunity }, { status: 200 });
-	} catch (error) {
-		return NextResponse.json({ error }, { status: 500 });
+	} catch (error: any) {
+		return NextResponse.json(
+			{ error: error.message ? error.message : error },
+			{ status: 500 }
+		);
 	}
 }
