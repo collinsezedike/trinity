@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { CommunityDBManager } from "@/app/managers";
+
 import { ContextParamsType } from "@/lib/utils";
+import { Community } from "@/app/models";
 
 export async function GET(req: NextRequest, context: ContextParamsType) {
 	try {
-		const community = await CommunityDBManager.getOne(context.params.id);
+		const community = await Community.findById(context.params.id);
 		return NextResponse.json({ data: community }, { status: 200 });
 	} catch (error) {
 		return NextResponse.json({ error }, { status: 500 });

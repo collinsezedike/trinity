@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { TokenDBManager } from "@/app/managers";
+import { Token } from "@/app/models";
 
 export async function GET(req: NextRequest) {
 	try {
 		const { authority, community } = await req.json();
-		const tokens = await TokenDBManager.getAll(authority, community);
+		const tokens = await Token.find({ authority, community });
 		return NextResponse.json({ data: tokens }, { status: 200 });
 	} catch (error) {
 		return NextResponse.json({ error }, { status: 500 });
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
 				{ status: 400 }
 			);
 		}
-		await TokenDBManager.create({
+		const newToken = new Token({
 			name,
 			symbol,
 			description,
@@ -38,10 +38,8 @@ export async function POST(req: NextRequest) {
 			authority,
 			community,
 		});
-		return NextResponse.json(
-			{ message: "token created successfully" },
-			{ status: 200 }
-		);
+		await newToken.save();
+		return NextResponse.json({ data: newToken }, { status: 200 });
 	} catch (error) {
 		return NextResponse.json({ error }, { status: 500 });
 	}
