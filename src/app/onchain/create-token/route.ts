@@ -1,11 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server'
 import {
 	createInitializeMintInstruction,
 	createInitializeNonTransferableMintInstruction,
 	ExtensionType,
 	getMintLen,
 	TOKEN_2022_PROGRAM_ID,
-} from "@solana/spl-token";
+} from '@solana/spl-token'
 import {
 	Connection,
 	Keypair,
@@ -13,14 +13,14 @@ import {
 	SystemProgram,
 	TransactionMessage,
 	VersionedTransaction,
-} from "@solana/web3.js";
+} from '@solana/web3.js'
 
-import { CLUSTER_URL } from "@/lib/utils";
+import { CLUSTER_URL } from '@/lib/utils'
 
 export async function POST(req: NextRequest) {
 	try {
 		const { name, symbol, description, image, authority, address } =
-			await req.json();
+			await req.json()
 		if (
 			!name?.trim() ||
 			!symbol?.trim() ||
@@ -31,32 +31,31 @@ export async function POST(req: NextRequest) {
 		) {
 			return NextResponse.json(
 				{
-					error: "name, symbol, description, image, authority and address are required",
+					error:
+						'name, symbol, description, image, authority and address are required',
 				},
 				{ status: 400 }
-			);
+			)
 		}
 
-		let payer: PublicKey;
+		let payer: PublicKey
 		try {
-			payer = new PublicKey(address);
+			payer = new PublicKey(address)
 		} catch (error: any) {
 			return NextResponse.json(
-				{ error: "Invalid address provided: not a valid public key" },
+				{ error: 'Invalid address provided: not a valid public key' },
 				{ status: 500 }
-			);
+			)
 		}
 
-		const connection = new Connection(CLUSTER_URL);
-		const { blockhash } = await connection.getLatestBlockhash();
+		const connection = new Connection(CLUSTER_URL)
+		const { blockhash } = await connection.getLatestBlockhash()
 
-		const mintKeypair = Keypair.generate();
-		const mint = mintKeypair.publicKey;
-		const decimals = 2;
-		const mintLen = getMintLen([ExtensionType.NonTransferable]);
-		const lamports = await connection.getMinimumBalanceForRentExemption(
-			mintLen
-		);
+		const mintKeypair = Keypair.generate()
+		const mint = mintKeypair.publicKey
+		const decimals = 2
+		const mintLen = getMintLen([ExtensionType.NonTransferable])
+		const lamports = await connection.getMinimumBalanceForRentExemption(mintLen)
 
 		const createAccountIxn = SystemProgram.createAccount({
 			fromPubkey: payer,
@@ -64,13 +63,13 @@ export async function POST(req: NextRequest) {
 			space: mintLen,
 			lamports,
 			programId: TOKEN_2022_PROGRAM_ID,
-		});
+		})
 
 		const initializeNonTransferableMintIxn =
 			createInitializeNonTransferableMintInstruction(
 				mint,
 				TOKEN_2022_PROGRAM_ID
-			);
+			)
 
 		const initializeMintIxn = createInitializeMintInstruction(
 			mint,
@@ -78,7 +77,7 @@ export async function POST(req: NextRequest) {
 			payer,
 			null,
 			TOKEN_2022_PROGRAM_ID
-		);
+		)
 
 		const message = new TransactionMessage({
 			payerKey: payer,
@@ -88,15 +87,16 @@ export async function POST(req: NextRequest) {
 				initializeNonTransferableMintIxn,
 				initializeMintIxn,
 			],
-		}).compileToV0Message();
+		}).compileToV0Message()
 
-		const txn = new VersionedTransaction(message);
+		const txn = new VersionedTransaction(message)
+		const serializedTxn = Buffer.from(txn.serialize()).toString('base64')
 
-		return NextResponse.json(txn, { status: 200 });
+		return NextResponse.json({ txn: serializedTxn }, { status: 200 })
 	} catch (error: any) {
 		return NextResponse.json(
 			{ error: error.message ? error.message : error },
 			{ status: 500 }
-		);
+		)
 	}
 }
