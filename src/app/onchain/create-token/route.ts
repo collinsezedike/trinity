@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
 			mint,
 			decimals,
 			payer,
-			null,
+			payer,
 			TOKEN_2022_PROGRAM_ID
 		);
 
@@ -91,6 +91,7 @@ export async function POST(req: NextRequest) {
 		}).compileToV0Message();
 
 		const txn = new VersionedTransaction(message);
+		txn.sign([mintKeypair]);
 
 		return NextResponse.json(txn, { status: 200 });
 	} catch (error: any) {
