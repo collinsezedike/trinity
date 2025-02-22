@@ -16,7 +16,7 @@ export default function RootLayout({
 		<html lang="en">
 			<style>
 				@import
-				url('https://fonts.googleapis.com/css2?family=Bowlby+One&display=swap');
+				url('https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap');
 			</style>
 			<body>
 				<WalletContext>{children}</WalletContext>

@@ -4,13 +4,11 @@ import {
 	Connection,
 	Keypair,
 	PublicKey,
-	sendAndConfirmTransaction,
 	SystemProgram,
 	TransactionMessage,
 	VersionedTransaction,
 } from '@solana/web3.js'
 import '@solana/wallet-adapter-react-ui/styles.css'
-import axios from 'axios'
 
 import {
 	createInitializeMintInstruction,
@@ -125,21 +123,36 @@ const LandingPage = () => {
 	}
 
 	return (
-		<div
-			style={{
-				height: '100vh',
-			}}
-		>
+		<div>
 			<nav>
 				<h1>Trinity</h1>
-				<WalletMultiButton />
+				<ul>
+					<li>Features</li>
+					<li>Pricing</li>
+					<li>Blog</li>
+					<li>Company</li>
+				</ul>
+				<div>
+					<button>Sign in</button>
+					<button>Try now</button>
+				</div>
 			</nav>
 			<div className="hero_section">
-				<h2>Tokenized Identity</h2>
-				<h2>For Web3 Communities</h2>
-				<div style={{ display: 'flex', justifyContent: 'center', gap: 30 }}>
-					<button className="primary">Get Started</button>
-					<button className="secondary">Learn more</button>
+				<h2>Tokenized Identity For</h2>
+				<h2>Web3 Communities</h2>
+				<div>
+					<button>Get Started</button>
+					<button>Explore Vatic</button>
+					<img
+						className="coin"
+						src="/coin.png"
+						alt=""
+					/>
+					<img
+						className="blur"
+						src="/blur.png"
+						alt=""
+					/>
 				</div>
 			</div>
 		</div>

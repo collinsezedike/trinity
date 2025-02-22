@@ -8,21 +8,50 @@
 }
 button,
 h1,
-h2{
-  font-family: "Bowlby One", serif;
+h2,
+li,
+button{
+  font-family:"Sora", serif;
 }
 body{
-  background-color: black;
-  color: white;
+  background-color: EFEFEF;
+  color: black;
   height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 nav{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 30px 50px;
+  padding: 50px 128px 0 101px;
+}
+nav ul{
+  list-style-type: none;
+  display: flex;
+  gap: 32px;
+}
+nav li{
+  font-weight: 500;
+}
+nav div button{
+  width: 117px;
+  height: 40px;
+  border-radius: 60px;
+  font-weight: 600;
+  font-size: 18px;
+  margin-right: 12px;
+  cursor: pointer;
+}
+nav>div button:first-child{
+  color: #6938EF;
+  border: 2px solid #6938EF;
+}
+nav>div button:last-child{
+  background-color: #6938EF;
+  border:none;
+  color: #fff;
 }
 .hero_section{
   position: absolute;
@@ -31,24 +60,45 @@ nav{
   transform: translate(0, -50%);
 }
 .hero_section h2{
-  font-size: 80px;
+  font-size: 90px;
   text-align: center;
 }
+.hero_section div{
+  margin-top: 64px;
+  display: flex; 
+  justify-content: center; 
+  gap: 40px ;
+  position: relative;
+}
 .hero_section button{
-  padding: 10px 20px;
-  font-size: 23px;
-  text-transform:capitalize;
-  font-weight: 700;
-  border: none;
-  color: white;
-  border-radius: 5px;
+  height: 80px;
+  border-radius: 60px;
+  font-weight: 600;
+  font-size: 40px;
   cursor: pointer;
 }
-.hero_section button.primary{
-  background-color: #512da8;
+.hero_section div button:first-child{
+  background-color: #6938EF;
+  border: none;
+  width: 380px;
+  color: #fff;
 }
-.hero_section button.secondary{
-  background-color: #1a1f2e;
+.hero_section div button:nth-child(2){
+  color: #6938EF;
+  border: none;
+  width: 400px;
+}
+
+.hero_section div>img.coin{
+  position: absolute;
+  z-index: -1;
+  top: -197px;
+}
+.hero_section div>img.blur{
+  position: absolute;
+  z-index: -2;
+  top: 50%;
+  transform: translate(0, -65%);
 }
 
 @media (max-width:1025px) {
